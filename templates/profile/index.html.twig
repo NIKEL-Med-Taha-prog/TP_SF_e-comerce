@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil - Our Store{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="h5 mb-0">Mon Profil Utilisateur</h2>
+                </div>
+                <div class="card-body p-4">
+                    <p class="lead">Bienvenue sur votre espace personnel.</p>
+                    <hr>
+                    <div class="mb-3">
+                        <strong>Adresse Email :</strong> {{ user.email }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Rôles :</strong>
+                        {% for role in user.roles %}
+                            <span class="badge bg-secondary">{{ role }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

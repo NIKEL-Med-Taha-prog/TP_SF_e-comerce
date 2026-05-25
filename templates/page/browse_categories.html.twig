@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <!-- Header -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="home.html">Our Store</a>
@@ -33,7 +32,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <div class="bg-primary bg-gradient text-white py-5">
         <div class="container">
             <div class="row align-items-center">
@@ -50,7 +48,6 @@
         </div>
     </div>
 
-    <!-- Categories Section -->
     <div class="container my-5" id="categories">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold">Shop by Category</h2>
@@ -58,19 +55,15 @@
         </div>
 
        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            {# On lance la boucle pour lire la base de données #}
             {% for category in categories %}
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-body text-center">
-                            {# BONUS : On affiche dynamiquement le nombre de produits ! #}
                             <span class="badge bg-primary mb-2">{{ category.products|length }} Products</span>
 
-                            {# On affiche le vrai nom de la catégorie #}
                             <h4 class="card-title">{{ category.name }}</h4>
                             <p class="card-text text-muted">Découvrez nos produits dans cette catégorie.</p>
 
-                            {# Le lien dynamique vers la page des produits #}
                             <a href="{{ path('app_products_by_category', {'id': category.id}) }}" class="btn btn-outline-primary">
                                 Voir {{ category.name }}
                             </a>
@@ -85,7 +78,6 @@
         </div>
     </div>
 
-    <!-- Features Section -->
     <div class="bg-light py-5 mt-5">
         <div class="container">
             <div class="row text-center">
@@ -134,7 +126,6 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="bg-dark text-white mt-5 py-4">
         <div class="container">
             <div class="row">

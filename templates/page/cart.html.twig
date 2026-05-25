@@ -9,7 +9,6 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            {# On utilise path() pour les liens internes #}
             <a class="navbar-brand" href="{{ path('app_home') }}">Our Store</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -30,7 +29,6 @@
     <div class="container my-5">
         <h1 class="mb-4">Shopping Cart</h1>
 
-        {# Affichage des messages de succès (flash) #}
         {% for message in app.flashes('success') %}
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ message }}
@@ -54,7 +52,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {# On boucle dynamiquement sur les items du panier #}
                                     {% for item in cart.cartItems %}
                                         <tr>
                                             <td>
@@ -66,7 +63,6 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            {# Attention : on utilise .prix ou .sellPrice selon ton entité Product #}
                                             <td>{{ item.price }} €</td>
                                             <td>{{ item.quantity }}</td>
                                             <td class="fw-bold">{{ item.price * item.quantity }} €</td>
@@ -75,7 +71,6 @@
                                             </td>
                                         </tr>
                                     {% else %}
-                                        {# Si le panier en session est vide #}
                                         <tr>
                                             <td colspan="5" class="text-center py-5">
                                                 <p class="lead text-muted">Your cart is currently empty.</p>
@@ -105,7 +100,6 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between mb-2">
                             <span>Subtotal:</span>
-                            {# Appel de la méthode total() de ton objet Cart #}
                             <span>{{ cart.total() }} €</span>
                         </div>
                         <div class="d-flex justify-content-between mb-2">
