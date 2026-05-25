@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Service\Security\RegistrationService;
@@ -14,24 +15,21 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, RegistrationService $registrationService): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $newUser = new User();
+        $registrationForm = $this->createForm(RegistrationFormType::class, $newUser);
+        $registrationForm->handleRequest($request);
 
-        $form->handleRequest($request);
+        if ($registrationForm->isSubmitted() && $registrationForm->isValid()) {
+            $plainPassword = $registrationForm->get('plainPassword')->getData();
+            $registrationService->registerUser($newUser, $plainPassword);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $plainPassword = $form->get('plainPassword')->getData();
-
-            $registrationService->registerUser($user, $plainPassword);
-
-            $this->addFlash('success', 'Votre compte a bien été créé !');
+            $this->addFlash('success', 'Inscription réussie ! Bienvenue parmi nous.');
 
             return $this->redirectToRoute('app_home');
         }
 
         return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
+            'registrationForm' => $registrationForm->createView(),
         ]);
     }
 }

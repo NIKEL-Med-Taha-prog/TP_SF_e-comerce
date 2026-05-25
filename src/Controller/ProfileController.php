@@ -9,12 +9,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class ProfileController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile')]
-    public function index(): Response
+    public function show(): Response
     {
-        $user = $this->getUser();
+        $currentUser = $this->getUser();
 
         return $this->render('profile/index.html.twig', [
-            'user' => $user,
+            'user' => $currentUser,
         ]);
     }
 }

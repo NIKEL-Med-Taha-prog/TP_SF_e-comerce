@@ -40,19 +40,6 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getPrix(): ?float
-    {
-        return $this->prix;
-    }
-
-    public function setPrix(float $prix): static
-    {
-        $this->prix = $prix;
-
         return $this;
     }
 
@@ -64,7 +51,17 @@ class Product
     public function setDescription(?string $description): static
     {
         $this->description = $description;
+        return $this;
+    }
 
+    public function getPrix(): ?float
+    {
+        return $this->prix;
+    }
+
+    public function setPrix(float $prix): static
+    {
+        $this->prix = $prix;
         return $this;
     }
 
@@ -76,7 +73,6 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
-
         return $this;
     }
 }

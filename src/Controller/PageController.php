@@ -6,75 +6,78 @@ use App\Entity\Product;
 use App\Repository\CategoryRepository;
 use App\Service\Cart\CartHandler;
 use App\Service\Cart\CartItem;
+use App\Service\Cart\Cart;
+use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use App\Repository\ProductRepository;
-use Symfony\Component\HttpFoundation\Request;
 
 final class PageController extends AbstractController
 {
-   #[Route('/', name: 'app_home')]
-    public function index(ProductRepository $productRepository): Response
+    #[Route('/', name: 'app_home')]
+    public function home(ProductRepository $productRepository): Response
     {
-     $products = $productRepository->findAll();
+        $allProducts = $productRepository->findAll();
 
-     return $this->render('page/index.html.twig', [
-         'products' => $products
-     ]);
+        return $this->render('page/index.html.twig', [
+            'products' => $allProducts,
+        ]);
     }
 
     #[Route('/browse_categories', name: 'app_browse_categories')]
-    public function categories(CategoryRepository $categoryRepository): Response
+    public function listCategories(CategoryRepository $categoryRepository): Response
     {
-        $categories = $categoryRepository->findAll();
+        $allCategories = $categoryRepository->findAll();
+
         return $this->render('page/browse_categories.html.twig', [
-            'categories' => $categories
+            'categories' => $allCategories,
         ]);
     }
 
     #[Route('/category/{id}', name: 'app_products_by_category')]
-    public function productByCategory(\App\Entity\Category $category): Response
+    public function showProductsByCategory(\App\Entity\Category $category): Response
     {
+        $categoryProducts = $category->getProducts();
+
         return $this->render('page/products_by_category.html.twig', [
             'category' => $category,
-            'products' => $category->getProducts()
+            'products' => $categoryProducts,
         ]);
     }
 
     #[Route('/product/{id}', name: 'app_product_details')]
-    public function productDetails(Product $product): Response
+    public function showProductDetails(Product $product): Response
     {
         return $this->render('page/product_details.html.twig', [
-            'product' => $product
+            'product' => $product,
+        ]);
+    }
+
+    #[Route('/cart', name: 'app_cart')]
+    public function showCart(CartHandler $cartHandler): Response
+    {
+        $currentCart = $cartHandler->handle(new Cart());
+
+        return $this->render('page/cart.html.twig', [
+            'cart' => $currentCart,
         ]);
     }
 
     #[Route('/cart/add/{id}', name: 'cart_add')]
-    public function add(Product $product, CartHandler $cartHandler, Request $request): Response    {
-       $quantity = $request->request->get('quantity', 1);
+    public function addToCart(Product $product, CartHandler $cartHandler, Request $request): Response
+    {
+        $qty = (int) $request->request->get('quantity', 1);
 
-        $quantity = (int) $quantity;
+        $cartItem = new CartItem();
+        $cartItem->product = $product;
+        $cartItem->price = $product->getPrix();
+        $cartItem->quantity = $qty;
 
-        $item = new CartItem();
-        $item->product = $product;
-        $item->price = $product->getPrix();
-        $item->quantity = $quantity;
+        $cartHandler->addItem($cartItem);
 
-        $cartHandler->addItem($item);
-
-        $this->addFlash('success', 'Produit ajouté au panier !');
+        $this->addFlash('success', 'Article ajouté au panier avec succès !');
 
         return $this->redirectToRoute('app_cart');
-    }
-
-    #[Route('/cart', name: 'app_cart')]
-    public function cart(CartHandler $cartHandler): Response
-    {
-        $cart = $cartHandler->handle(new \App\Service\Cart\Cart());
-
-        return $this->render('page/cart.html.twig', [
-            'cart' => $cart
-        ]);
     }
 }

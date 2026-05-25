@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service\Security;
+
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -14,8 +15,9 @@ class RegistrationService
 
     public function registerUser(User $user, string $plainPassword): void
     {
-        $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
-        $user->setPassword($hashedPassword);
+        $hashedPwd = $this->passwordHasher->hashPassword($user, $plainPassword);
+        $user->setPassword($hashedPwd);
+
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }

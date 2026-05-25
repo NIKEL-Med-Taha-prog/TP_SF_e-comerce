@@ -18,9 +18,6 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    /**
-     * @var Collection<int, Product>
-     */
     #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'category')]
     private Collection $products;
 
@@ -42,13 +39,9 @@ class Category
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
-    /**
-     * @return Collection<int, Product>
-     */
     public function getProducts(): Collection
     {
         return $this->products;
@@ -60,7 +53,6 @@ class Category
             $this->products->add($product);
             $product->setCategory($this);
         }
-
         return $this;
     }
 
@@ -71,7 +63,6 @@ class Category
                 $product->setCategory(null);
             }
         }
-
         return $this;
     }
 }
